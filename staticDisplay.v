@@ -23,7 +23,7 @@
 module staticDisplay
 (
 input wire video_on,
-input wire [9:0] pix_x, pix_y,
+input wire [15:0] pix_x, pix_y,
 output reg [3:0] graph_rgb
 );
 
@@ -57,7 +57,7 @@ localparam BALL_Y_B = BALL_Y_T + 8 - 1;
 
 // object output signals
 wire wall_on, bar_on, sq_ball_on;
-wire [2:0] wall_rgb, bar_rgb, ball_rgb;
+wire [3:0] wall_rgb, bar_rgb, ball_rgb;
 
 // body
 // (wall) left vertical strip
@@ -82,7 +82,7 @@ assign ball_rgb = 4'h9; // red maybe
 // rgb multiplexing circuit
 always @*
     if (!video_on)
-        graph_rgb = 4'hf; // blank white
+        graph_rgb = 4'h0; // blank black
     else if (wall_on)
         graph_rgb = wall_rgb;
     else if (bar_on)

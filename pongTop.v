@@ -28,7 +28,7 @@ output wire [3:0] rgb
 //output wire [3:0] testRgb
 );
 
-wire [9:0] pix_x, pix_y; // signals for x and y coordinates
+wire [15:0] pix_x, pix_y; // signals for x and y coordinates
 wire video_on; // signals for displayed video and 25Mhz timing
 reg [3:0] rgb_reg;
 wire [3:0] rgb_next;
@@ -56,12 +56,12 @@ vgaSync vhSync(
 
 // will need a pixel generating circuit for the pong game
 
-always @(posedge clk)
-    if (clk_25M)
-        rgb_reg <= rgb_next;
-// output
-assign rgb = rgb_reg;
-
+//always @(posedge clk)
+//    if (clk_25M)
+//        rgb_reg <= rgb_next;
+//// output
+//assign rgb = rgb_reg;
+assign rgb = ((pix_x < 784) && (pix_x > 143) && (pix_y < 515) && (pix_y > 34)) ? 4'hF : 4'h0;
 
 
 

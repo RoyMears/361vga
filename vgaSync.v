@@ -22,7 +22,7 @@ module vgaSync(
 input wire clk_25MHz, reset,
 
 output wire horizontalSync, verticalSync, videoOn,
-output wire [9:0] pixelX, pixelY
+output wire [15:0] pixelX, pixelY
 );
 
 // VGA 640-by-480 sync parameters defined in book.
@@ -123,20 +123,25 @@ always @(posedge clk_25MHz)begin
 // horizontal and vertical sync
 // recomended buffer to avoid glitch
 
+
+
+//assign videoOn = (horizontalCount < horizontalDisplay) && (verticalCount < virticalDisplay); // only raise video_on when in display area
+assign videoOn = ((horizontalCount < 784) && (horizontalCount > 143) && (verticalCount < 515) && (verticalCount > 34)) ? 1'b1 : 1'b0; // only raise video_on when in display area
+
+
+
+
+
 // raise next only when in specified range
-assign hSyncNext = (horizontalCount < horizontalRetrace - 1) ? 1'b1:1'b0;
+assign horizontalSync = (horizontalCount < horizontalRetrace) ? 1'b1:1'b0;
 //assign hSyncNext = (horizontalCount >= (horizontalDisplay + horizontalFrontPorch) && (horizontalCount <= (horizontalDisplay + horizontalFrontPorch + horizontalRetrace - 1))); // horizontal count >= 656, and horizontal count <= 751
 
 // raise next only when in specified range
-assign vSyncNext = (verticalCount < virticalRetrace) ? 1'b1:1'b0;
+assign verticalSync = (verticalCount < virticalRetrace) ? 1'b1:1'b0;
 //assign vSyncNext = ((verticalCount >= (virticalDisplay + virticalBackPorch)) && (verticalCount <= (virticalDisplay + virticalBackPorch + virticalRetrace - 1))); // vertial count >= 490, and vertical count <= 491
 
-
-assign videoOn = (horizontalCount < horizontalDisplay) && (verticalCount < virticalDisplay); // only raise video_on when in display area
-
-
-assign horizontalSync = hSyncReg;
-assign verticalSync = vSyncReg;
+//assign horizontalSync = hSyncReg;
+//assign verticalSync = vSyncReg;
 assign pixelX = horizontalCount;
 assign pixelY = verticalCount;
 
